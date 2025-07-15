@@ -20,10 +20,12 @@
     </div>
     <div id="chatThread" class="chat-thread"></div>
     <div class="input-bar" id="inputBar">
-        <input id="userInput" type="text" placeholder="Type your message..." autocomplete="off">
+        <input id="userInput" type="text" placeholder="Type your message..." autocomplete="off" onkeydown="if(event.key==='Enter'){sendMessage();}">
         <button onclick="sendMessage()">Send</button>
     </div>
-    <button id="endSessionBtn" onclick="endSession()" class="support-btn end-btn">End Session</button>
+    <div style="display:flex; justify-content:center; margin-top:18px; margin-bottom:18px;">
+        <button id="endSessionBtn" onclick="endSession()" class="support-btn end-btn">End Session</button>
+    </div>
     <div id="endSessionFlow" style="display:none; text-align:center; margin-top:20px;">
         <div id="endSessionQuestion" style="margin-bottom: 16px; font-weight: bold;">Is your Problem/Query Solved?</div>
         <div style="display:flex; flex-direction:column; align-items:center; gap:16px;">
@@ -32,8 +34,8 @@
                 <button id="noBtn" onclick="endSessionNo()" class="support-btn no-btn">No</button>
             </div>
             <div id="thankYouMsg" style="display:none; margin-top:16px; font-weight:bold; color:#27ae60;">Thank you!</div>
-            <button id="goHomeBtn" onclick="resetChat()" class="support-btn home-btn" style="display:none;">Go Home</button>
-            <button id="supportBtn" onclick="talkWithSupport()" class="support-btn support-officer-btn" style="display:none; margin: 0 auto;">Talk with Support Officer</button>
+            <button id="goHomeBtn" onclick="resetChat()" class="support-btn home-btn" style="display:none; margin: 0 auto 18px auto;">Go Home</button>
+            <button id="supportBtn" onclick="talkWithSupport()" class="support-btn support-officer-btn" style="display:none; margin: 0 auto 18px auto;">Talk with Support Officer</button>
         </div>
     </div>
 </div>
