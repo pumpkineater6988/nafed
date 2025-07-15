@@ -2,9 +2,103 @@ body { font-family: Arial, sans-serif; background:#f5f7fa; display:flex; justify
 .chat-container { width:400px; background:#fff; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); display:flex; flex-direction:column;}
 header { background:#006cbe; color:#fff; padding:12px; font-weight:bold; text-align:center; border-radius:8px 8px 0 0;}
 .role-select { padding:8px; background:#eef2f5; text-align:center;}
-.chat-thread { flex:1; padding:10px; overflow-y:auto; }
+.chat-thread {
+  flex:1;
+  padding:10px;
+  overflow-y:auto;
+  max-height: 400px;
+  min-height: 200px;
+  scrollbar-width: thin;
+  scrollbar-color: #b0b0b0 #f5f7fa;
+}
+.chat-thread::-webkit-scrollbar {
+  width: 8px;
+}
+.chat-thread::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border-radius: 4px;
+}
+.chat-thread::-webkit-scrollbar-track {
+  background: #f5f7fa;
+}
 .chat-thread .user { text-align:right; margin:6px 0; }
 .chat-thread .assistant { text-align:left; margin:6px 0; color:#006cbe; }
 .input-bar { display:flex; border-top:1px solid #ddd;}
 .input-bar input { flex:1; padding:10px; border:none; }
 .input-bar button { background:#006cbe; color:#fff; border:none; padding:0 16px; cursor:pointer;}
+.bubble {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 18px;
+  max-width: 75%;
+  margin-bottom: 8px;
+  word-break: break-word;
+  font-size: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  position: relative;
+}
+.bubble.user {
+  background: #006cbe;
+  color: #fff;
+  align-self: flex-end;
+  margin-left: auto;
+  margin-right: 0;
+  text-align: right;
+  padding: 12px 20px 12px 24px;
+}
+.bubble.assistant {
+  background: #f1f3f6;
+  color: #222;
+  align-self: flex-start;
+  margin-right: auto;
+  margin-left: 0;
+  text-align: left;
+  border: 1px solid #e0e4ea;
+  padding: 12px 24px 12px 20px;
+}
+#endSessionBtn {
+  transition: background 0.2s;
+}
+#endSessionBtn:hover {
+  background: #c0392b;
+}
+#yesBtn:hover {
+  background: #219150;
+}
+#noBtn:hover {
+  background: #c0392b;
+}
+#supportBtn {
+  background: #8e44ad !important;
+}
+#supportBtn:hover {
+  background: #6c3483 !important;
+}
+#endSessionFlow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+}
+#goHomeBtn {
+  margin-top: 12px;
+  background: #006cbe;
+  color: #fff;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 5px;
+  font-weight: bold;
+  display: inline-block;
+}
+.bubble.assistant strong {
+  font-weight: bold;
+}
+.bubble.assistant ul {
+  margin: 8px 0 8px 18px;
+  padding: 0;
+}
+.bubble.assistant li {
+  margin-bottom: 4px;
+}
