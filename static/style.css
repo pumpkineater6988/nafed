@@ -215,8 +215,7 @@ header { background:#006cbe; color:#fff; padding:12px; font-weight:bold; text-al
 }
 .end-btn {
   background: #e74c3c;
-  width: 90%;
-  margin: 18px auto 0 auto;
+  margin: 0 auto 18px auto;
   display: block;
 }
 .end-btn:hover {
@@ -230,7 +229,7 @@ header { background:#006cbe; color:#fff; padding:12px; font-weight:bold; text-al
 .home-btn:hover { background: #00509e; }
 .support-officer-btn {
   display: block;
-  margin: 0 auto !important;
+  margin: 0 auto 18px auto !important;
 }
 #yesNoBtns {
   display: flex;
