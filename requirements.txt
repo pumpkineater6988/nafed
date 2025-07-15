@@ -1,4 +1,5 @@
 Flask==2.3.2
-python-dotenv
 google-generativeai==0.3.2
 gunicorn
+python-dotenv
+mysql-connector-python
