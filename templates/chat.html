@@ -5,11 +5,12 @@
     <title>NAFED e‑Auction Assistant</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/axios@1.5.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 <div class="chat-container">
     <header>NAFED e‑Auction Assistant</header>
-    <div class="role-select">
+    <div class="role-select" id="roleSelect">
         Role:
         <select id="roleChoice">
             <option>Bidder</option>
@@ -18,9 +19,22 @@
         </select>
     </div>
     <div id="chatThread" class="chat-thread"></div>
-    <div class="input-bar">
+    <div class="input-bar" id="inputBar">
         <input id="userInput" type="text" placeholder="Type your message..." autocomplete="off">
         <button onclick="sendMessage()">Send</button>
+    </div>
+    <button id="endSessionBtn" onclick="endSession()" style="margin: 10px auto 0; width: 90%; background: #e74c3c; color: #fff; border: none; padding: 10px; border-radius: 6px; cursor: pointer;">End Session</button>
+    <div id="endSessionFlow" style="display:none; text-align:center; margin-top:20px;">
+        <div id="endSessionQuestion" style="margin-bottom: 16px; font-weight: bold;">Is your Problem/Query Solved?</div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
+            <div>
+                <button id="yesBtn" onclick="endSessionYes()" style="background:#27ae60; color:#fff; border:none; padding:8px 24px; border-radius:5px; margin:0 10px; font-weight:bold;">Yes</button>
+                <button id="noBtn" onclick="endSessionNo()" style="background:#e74c3c; color:#fff; border:none; padding:8px 24px; border-radius:5px; margin:0 10px; font-weight:bold;">No</button>
+            </div>
+            <div id="thankYouMsg" style="display:none; margin-top:16px; font-weight:bold; color:#27ae60;">Thank you!</div>
+            <button id="goHomeBtn" onclick="resetChat()" style="display:none; background:#006cbe; color:#fff; border:none; padding:8px 24px; border-radius:5px; font-weight:bold;">Go Home</button>
+            <button id="supportBtn" onclick="talkWithSupport()" style="display:none; background:#8e44ad; color:#fff; border:none; padding:8px 24px; border-radius:5px; margin-top:16px; font-weight:bold;">Talk with Support Officer</button>
+        </div>
     </div>
 </div>
 <script>
@@ -34,22 +48,75 @@ async function sendMessage() {
     try {
         const resp = await axios.post('/chat', {message: msg, role: role});
         appendMessage('assistant', resp.data.reply);
+        hideInitialAssistantMsg();
     } catch (err) {
         appendMessage('assistant', 'Error contacting server.');
     }
 }
 function appendMessage(role, text) {
     const div = document.createElement('div');
-    div.className = role;
-    div.innerText = text;
+    div.className = 'bubble ' + role;
+    if (role === 'assistant') {
+        div.innerHTML = marked.parse(text);
+    } else {
+        div.innerText = text;
+    }
     document.getElementById('chatThread').appendChild(div);
     div.scrollIntoView();
+}
+function hideInitialAssistantMsg() {
+    // Hide the initial assistant message and role select after first user message
+    const roleSelect = document.getElementById('roleSelect');
+    if (roleSelect) roleSelect.style.display = 'none';
+    const chatThread = document.getElementById('chatThread');
+    const bubbles = chatThread.getElementsByClassName('assistant');
+    if (bubbles.length > 0) {
+        bubbles[0].style.display = 'none';
+    }
+}
+function endSession() {
+    document.getElementById('inputBar').style.display = 'none';
+    document.getElementById('endSessionBtn').style.display = 'none';
+    document.getElementById('endSessionFlow').style.display = 'block';
+}
+function endSessionYes() {
+    document.getElementById('yesBtn').style.display = 'none';
+    document.getElementById('noBtn').style.display = 'none';
+    document.getElementById('thankYouMsg').style.display = 'block';
+    document.getElementById('goHomeBtn').style.display = 'inline-block';
+}
+function endSessionNo() {
+    document.getElementById('yesBtn').style.display = 'none';
+    document.getElementById('noBtn').style.display = 'none';
+    document.getElementById('supportBtn').style.display = 'inline-block';
+}
+function talkWithSupport() {
+    document.getElementById('supportBtn').innerText = 'Connecting to Support Officer...';
+    setTimeout(resetChat, 2000);
+}
+function resetChat() {
+    // Clear chat, show initial message and role select, reset UI
+    document.getElementById('chatThread').innerHTML = '';
+    document.getElementById('inputBar').style.display = 'flex';
+    document.getElementById('endSessionBtn').style.display = 'block';
+    document.getElementById('endSessionFlow').style.display = 'none';
+    document.getElementById('yesBtn').style.display = 'inline-block';
+    document.getElementById('noBtn').style.display = 'inline-block';
+    document.getElementById('thankYouMsg').style.display = 'none';
+    document.getElementById('supportBtn').style.display = 'none';
+    document.getElementById('goHomeBtn').style.display = 'none';
+    document.getElementById('roleSelect').style.display = 'block';
+    // Add initial assistant message
+    appendMessage('assistant', 'Hi! I’m the NAFED Auction Assistant. Please select your role (Bidder / HO-BO / Warehouse) and ask your question.');
 }
 // Load existing history from session (rendered by server)
 window.onload = () => {
     {% for m in session.get('chat', []) %}
     appendMessage("{{ m.role }}", "{{ m.content | replace('\n',' ') }}");
     {% endfor %}
+    // Hide initial assistant message and role if user already sent a message
+    const chatThread = document.getElementById('chatThread');
+    if (chatThread.children.length > 1) hideInitialAssistantMsg();
 };
 </script>
 </body>
