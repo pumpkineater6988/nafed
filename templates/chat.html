@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>NAFED e‑Auction Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.5.0/dist/axios.min.js"></script>
+</head>
+<body>
+<div class="chat-container">
+    <header>NAFED e‑Auction Assistant</header>
+    <div class="role-select">
+        Role:
+        <select id="roleChoice">
+            <option>Bidder</option>
+            <option>HO/BO</option>
+            <option>Warehouse</option>
+        </select>
+    </div>
+    <div id="chatThread" class="chat-thread"></div>
+    <div class="input-bar">
+        <input id="userInput" type="text" placeholder="Type your message..." autocomplete="off">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+<script>
+async function sendMessage() {
+    const input = document.getElementById('userInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+    appendMessage('user', msg);
+    input.value = '';
+    const role = document.getElementById('roleChoice').value;
+    try {
+        const resp = await axios.post('/chat', {message: msg, role: role});
+        appendMessage('assistant', resp.data.reply);
+    } catch (err) {
+        appendMessage('assistant', 'Error contacting server.');
+    }
+}
+function appendMessage(role, text) {
+    const div = document.createElement('div');
+    div.className = role;
+    div.innerText = text;
+    document.getElementById('chatThread').appendChild(div);
+    div.scrollIntoView();
+}
+// Load existing history from session (rendered by server)
+window.onload = () => {
+    {% for m in session.get('chat', []) %}
+    appendMessage("{{ m.role }}", "{{ m.content | replace('\n',' ') }}");
+    {% endfor %}
+};
+</script>
+</body>
+</html>
