@@ -21,7 +21,10 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "replace_this_secret")
 def call_gemini(messages):
     prompt_text = "\n".join([f"{m['role'].capitalize()}: {m['content']}" for m in messages])
     response = model.generate_content(prompt_text)
-    return response.text
+    reply = response.text.strip()
+    if reply.lower().startswith('assistant:'):
+        reply = reply[len('assistant:'):].lstrip()
+    return reply
 
 @app.route("/")
 def index():
