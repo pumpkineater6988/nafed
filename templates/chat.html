@@ -23,21 +23,34 @@
         <input id="userInput" type="text" placeholder="Type your message..." autocomplete="off">
         <button onclick="sendMessage()">Send</button>
     </div>
-    <button id="endSessionBtn" onclick="endSession()" style="margin: 10px auto 0; width: 90%; background: #e74c3c; color: #fff; border: none; padding: 10px; border-radius: 6px; cursor: pointer;">End Session</button>
+    <button id="endSessionBtn" onclick="endSession()" class="support-btn end-btn">End Session</button>
     <div id="endSessionFlow" style="display:none; text-align:center; margin-top:20px;">
         <div id="endSessionQuestion" style="margin-bottom: 16px; font-weight: bold;">Is your Problem/Query Solved?</div>
-        <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
-            <div>
-                <button id="yesBtn" onclick="endSessionYes()" style="background:#27ae60; color:#fff; border:none; padding:8px 24px; border-radius:5px; margin:0 10px; font-weight:bold;">Yes</button>
-                <button id="noBtn" onclick="endSessionNo()" style="background:#e74c3c; color:#fff; border:none; padding:8px 24px; border-radius:5px; margin:0 10px; font-weight:bold;">No</button>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:16px;">
+            <div id="yesNoBtns" style="display:flex; gap:16px; justify-content:center;">
+                <button id="yesBtn" onclick="endSessionYes()" class="support-btn yes-btn">Yes</button>
+                <button id="noBtn" onclick="endSessionNo()" class="support-btn no-btn">No</button>
             </div>
             <div id="thankYouMsg" style="display:none; margin-top:16px; font-weight:bold; color:#27ae60;">Thank you!</div>
-            <button id="goHomeBtn" onclick="resetChat()" style="display:none; background:#006cbe; color:#fff; border:none; padding:8px 24px; border-radius:5px; font-weight:bold;">Go Home</button>
-            <button id="supportBtn" onclick="talkWithSupport()" style="display:none; background:#8e44ad; color:#fff; border:none; padding:8px 24px; border-radius:5px; margin-top:16px; font-weight:bold;">Talk with Support Officer</button>
+            <button id="goHomeBtn" onclick="resetChat()" class="support-btn home-btn" style="display:none;">Go Home</button>
+            <button id="supportBtn" onclick="talkWithSupport()" class="support-btn support-officer-btn" style="display:none; margin: 0 auto;">Talk with Support Officer</button>
         </div>
     </div>
 </div>
 <script>
+// Typing animation HTML
+function showTyping() {
+    removeTyping();
+    const div = document.createElement('div');
+    div.className = 'bubble assistant typing-bubble';
+    div.innerHTML = '<span class="typing-dots"><span></span><span></span><span></span></span>';
+    document.getElementById('chatThread').appendChild(div);
+    div.scrollIntoView();
+}
+function removeTyping() {
+    const typing = document.querySelector('.typing-bubble');
+    if (typing) typing.remove();
+}
 async function sendMessage() {
     const input = document.getElementById('userInput');
     const msg = input.value.trim();
@@ -45,11 +58,14 @@ async function sendMessage() {
     appendMessage('user', msg);
     input.value = '';
     const role = document.getElementById('roleChoice').value;
+    showTyping();
     try {
         const resp = await axios.post('/chat', {message: msg, role: role});
+        removeTyping();
         appendMessage('assistant', resp.data.reply);
         hideInitialAssistantMsg();
     } catch (err) {
+        removeTyping();
         appendMessage('assistant', 'Error contacting server.');
     }
 }
@@ -84,11 +100,13 @@ function endSessionYes() {
     document.getElementById('noBtn').style.display = 'none';
     document.getElementById('thankYouMsg').style.display = 'block';
     document.getElementById('goHomeBtn').style.display = 'inline-block';
+    document.getElementById('supportBtn').style.display = 'none';
 }
 function endSessionNo() {
     document.getElementById('yesBtn').style.display = 'none';
     document.getElementById('noBtn').style.display = 'none';
-    document.getElementById('supportBtn').style.display = 'inline-block';
+    document.getElementById('supportBtn').style.display = 'block';
+    document.getElementById('supportBtn').style.margin = '0 auto';
 }
 function talkWithSupport() {
     document.getElementById('supportBtn').innerText = 'Connecting to Support Officer...';
