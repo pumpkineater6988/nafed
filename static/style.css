@@ -1,6 +1,6 @@
 body { font-family: Arial, sans-serif; background:#f5f7fa; display:flex; justify-content:center; padding:30px;}
 .chat-container { width:400px; background:#fff; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); display:flex; flex-direction:column;}
-header { background:#006cbe; color:#fff; padding:12px; font-weight:bold; text-align:center; border-radius:8px 8px 0 0;}
+header { background:#5CB85C; color:#fff; padding:12px; font-weight:bold; text-align:center; border-radius:8px 8px 0 0;}
 .role-select { padding:8px; background:#eef2f5; text-align:center;}
 .chat-thread {
   flex: 1;
@@ -50,19 +50,19 @@ header { background:#006cbe; color:#fff; padding:12px; font-weight:bold; text-al
   border: 1.5px solid #006cbe;
 }
 .input-bar button {
-  background: #006cbe;
-  color: #fff;
-  border: none;
-  padding: 10px 28px;
-  border-radius: 24px;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  background:#5CB85C;
+  color:#fff;
+  border:none;
+  padding:10px 28px;
+  border-radius:24px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:background 0.2s, box-shadow 0.2s;
+  box-shadow:0 1px 4px rgba(0,0,0,0.07);
 }
 .input-bar button:hover {
-  background: #00509e;
+  background:#449d44;
 }
 .bubble {
   display: inline-block;
@@ -75,7 +75,7 @@ header { background:#006cbe; color:#fff; padding:12px; font-weight:bold; text-al
   position: relative;
 }
 .bubble.user {
-  background: #006cbe;
+  background: #5CB85C;
   color: #fff;
   align-self: flex-end;
   text-align: right;
@@ -225,8 +225,8 @@ header { background:#006cbe; color:#fff; padding:12px; font-weight:bold; text-al
 .yes-btn:hover { background: #219150; }
 .no-btn { background: #e74c3c; }
 .no-btn:hover { background: #c0392b; }
-.home-btn { background: #006cbe; }
-.home-btn:hover { background: #00509e; }
+.home-btn { background: #5CB85C; }
+.home-btn:hover { background: #449d44; }
 .support-officer-btn {
   display: block;
   margin: 0 auto 18px auto !important;
